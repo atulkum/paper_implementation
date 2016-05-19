@@ -1,1 +1,2 @@
-# multi_digit_recognition_tensorflow
+# multi digit recognition tensorflow
+Recognizing house number in SVHN dataset using tensorflow.
