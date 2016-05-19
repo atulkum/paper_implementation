@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 n_digits = 3
 
@@ -76,6 +77,12 @@ y = classify(x)
 
 
 
+labels =  [[1,2,3,1,-1], [0,1,0,2,4], [9, 8, 0, 2,3]]
+table = tf.constant(np.identity(10, dtype=np.float32))
+z = tf.nn.embedding_lookup(table, labels, validate_indices=False)
+
+
 with tf.Session(''):
-  print y.eval()
+  #print y.eval()
+  print z.eval()
 

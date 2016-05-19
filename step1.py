@@ -22,7 +22,6 @@ with open('../data/generated/cont_train.pickle', 'rb') as f:
     y = save['y']
     X = X.reshape(-1, X.shape[1], X.shape[2], 1)   
     print 'train: X => ', X.shape, 'y => ', y.shape
-    '''  
     ####one hot encoding
     num_out = [10,10,10,10,10]
     y = np.hsplit(y, len(num_out))
@@ -31,20 +30,21 @@ with open('../data/generated/cont_train.pickle', 'rb') as f:
         y[i] = y[i].reshape(-1, num_out[i])
     y = np.hstack(y)
     print 'train: X => ', X.shape, 'y => ', y.shape
-    '''
+
+model_dir = '../models/mnist_reco'
+
 # Restore model if graph is saved into a folder.
-if os.path.exists("../models/mnist_reco/graph.pbtxt"):
-    classifier = learn.TensorFlowEstimator.restore("../models/mnist_reco/")
+if os.path.exists("%s/graph.pbtxt"%(model_dir)):
+    classifier = learn.TensorFlowEstimator.restore(model_dir)
 else:
     # Create a new resnet classifier.
     classifier = learn.TensorFlowEstimator(
-        #model_fn=get_image_feature_small, n_classes=y.shape[1], batch_size=100, steps=100,
-        model_fn=get_image_feature_small, n_classes=10, batch_size=100, steps=100,
+        model_fn=get_image_feature_small, n_classes=0, batch_size=100, steps=10,
         learning_rate=0.001, continue_training=True)
 
 while True:
     # Train model and save summaries into logdir.
-    classifier.fit(X, y, logdir="../models/mist_reco/")
+    classifier.fit(X, y, logdir=model_dir)
 
     # Calculate accuracy.
     #score = metrics.accuracy_score(
@@ -52,5 +52,5 @@ while True:
     #print('Accuracy: {0:f}'.format(score))
 
     # Save model graph and checkpoints.
-    #classifier.save("../models/mist_reco/")
+    classifier.save(model_dir)
 

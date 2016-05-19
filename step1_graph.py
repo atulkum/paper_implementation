@@ -15,6 +15,7 @@ import numpy as np
 	
 
 n_digits= 5
+n_classes =10
 
 def classify(prob):
     max_pred_digits = []
@@ -87,23 +88,22 @@ def get_image_feature_small(x, y):
     net = tf.reshape(net, [-1, net_shape[1] * net_shape[2] * net_shape[3]])
     
     net = learn.ops.dnn(net, [3072, 3072], activation=tf.nn.relu, dropout=0.5)
-    y_value = tf.split(1,n_digits,y)
-    print y.get_shape().as_list()
-    print y_value[0].get_shape().as_list()
+
+    y_labels = tf.split(1,n_digits,y)
+    print y_labels[0].get_shape().as_list()
     preds = []
     losses = 0.0
     for i in range(n_digits):
-	labels = tf.reshape(y_value[i], [-1, 10])
     	with tf.variable_scope('logistic_regression' + str(i)):
-		pred, loss = learn.models.logistic_regression(net, labels)
+		pred, loss = learn.models.logistic_regression(net, y_labels[i])
 		preds.append(pred)
 		losses += loss
 
     ############################## one hot encoded label for number of digits#########
-    num_digit_present = tf.cast(tf.reduce_sum(y, [1,2]), np.int32)
-    num_labels = 6
+    num_digit_present = tf.cast(tf.reduce_sum(y, [1]), np.int32)
+    print num_digit_present.get_shape().as_list()
     
-    table = tf.constant(np.identity(num_labels, dtype=np.float32))
+    table = tf.constant(np.identity(n_digits+1, dtype=np.float32))
     len_labels = tf.nn.embedding_lookup(table, num_digit_present)
 
     with tf.variable_scope('logistic_regression6'):
