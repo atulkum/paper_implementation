@@ -22,7 +22,6 @@ def classify(prob):
     cum_max_pred = []
     
     for i in range(n_digits):
-	print '=====', str(i)
         log_prob = tf.log(prob[i])
         max_pred_digits.append(tf.argmax(log_prob,1))
         max_pred = tf.reduce_max(log_prob,1)
@@ -57,11 +56,10 @@ def classify(prob):
     range_tiled = tf.tile(range_row, batch_shape)
 
     mask = tf.less(range_tiled, lengths_tiled)
-    zeros_ph = tf.placeholder(tf.int64, shape=[None, n_digits])
-    zeros_value = tf.zeros_like(zeros_ph)
-  
-    result = tf.select(mask, max_pred_digits, zeros_value)
     
+    all_neg_ones = tf.cast(tf.fill(tf.shape(mask), -1), tf.int64)
+    result = tf.select(mask, max_pred_digits, all_neg_ones)
+       
     return result
 
 def get_image_feature_small(x, y):
@@ -90,7 +88,6 @@ def get_image_feature_small(x, y):
     net = learn.ops.dnn(net, [3072, 3072], activation=tf.nn.relu, dropout=0.5)
 
     y_labels = tf.split(1,n_digits,y)
-    print y_labels[0].get_shape().as_list()
     preds = []
     losses = 0.0
     for i in range(n_digits):
@@ -101,7 +98,6 @@ def get_image_feature_small(x, y):
 
     ############################## one hot encoded label for number of digits#########
     num_digit_present = tf.cast(tf.reduce_sum(y, [1]), np.int32)
-    print num_digit_present.get_shape().as_list()
     
     table = tf.constant(np.identity(n_digits+1, dtype=np.float32))
     len_labels = tf.nn.embedding_lookup(table, num_digit_present)

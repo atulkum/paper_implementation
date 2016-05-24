@@ -40,8 +40,9 @@ def classify(prob):
     range_tiled = tf.tile(range_row, [batch_size, 1])
 
     mask = tf.less(range_tiled, lengths_tiled)
-    
-    result = tf.select(mask, max_pred_digits, tf.zeros([batch_size, n_digits], tf.int64))
+    all_neg_ones = tf.cast(tf.fill(tf.shape(mask), -1), tf.int64)
+	
+    result = tf.select(mask, max_pred_digits, all_neg_ones)
     
     return result
 
@@ -77,12 +78,11 @@ y = classify(x)
 
 
 
-labels =  [[1,2,3,1,-1], [0,1,0,2,4], [9, 8, 0, 2,3]]
-table = tf.constant(np.identity(10, dtype=np.float32))
-z = tf.nn.embedding_lookup(table, labels, validate_indices=False)
+#labels =  [[1,2,3,1,-1], [0,1,0,2,4], [9, 8, 0, 2,3]]
+#table = tf.constant(np.identity(10, dtype=np.float32))
+#z = tf.nn.embedding_lookup(table, labels, validate_indices=False)
 
 
 with tf.Session(''):
-  #print y.eval()
-  print z.eval()
+  print y.eval()
 

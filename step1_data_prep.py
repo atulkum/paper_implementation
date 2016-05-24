@@ -19,12 +19,19 @@ def maybe_download(filename):
  
   return filename
 
-train_data_filename = maybe_download('train-images-idx3-ubyte.gz')
-train_labels_filename = maybe_download('train-labels-idx1-ubyte.gz')
-test_data_filename = maybe_download('t10k-images-idx3-ubyte.gz')
-test_labels_filename = maybe_download('t10k-labels-idx1-ubyte.gz')
+train_data_filename = maybe_download('../data/MNIST_DATA/train-images-idx3-ubyte.gz')
+train_labels_filename = maybe_download('../data/MNIST_DATA/train-labels-idx1-ubyte.gz')
+test_data_filename = maybe_download('../data/MNIST_DATA/t10k-images-idx3-ubyte.gz')
+test_labels_filename = maybe_download('../data/MNIST_DATA/t10k-labels-idx1-ubyte.gz')
 
 
+
+def get_one_hot(raw_labels, num_col):
+    labels = tf.expand_dims(raw_labels, 1)
+    indices = tf.expand_dims(tf.range(0, batch_size), 1)
+    concated = tf.concat(1, [indices, labels])
+    onehot_labels = tf.sparse_to_dense(concated, tf.pack([batch_size, num_col]), 1.0, 0.0)
+    return onehot_labels
 
 IMAGE_SIZE = 28
 NUM_CHANNELS = 1
@@ -95,12 +102,15 @@ for i in range(60000):
     #cont_label = [5-num_blanck, val]
     
     for k in range(num_blanck):
-        if np.random.rand() < 0.5:
-            cont_img = cont_img + [blank]
-            cont_label = cont_label + [-1]
-        else:
-            cont_img = [blank] + cont_img
-            cont_label = [-1] + cont_label 
+        #if np.random.rand() < 0.5:
+        #    cont_img = cont_img + [blank]
+        #    cont_label = cont_label + [-1]
+        #else:
+        #    cont_img = [blank] + cont_img
+        #    cont_label = [-1] + cont_label 
+        
+        cont_img = cont_img + [blank]
+        cont_label = cont_label + [-1]
         
     cont_train_labels[i] = cont_label
     cont_train_data[i, :, :]  = np.hstack(cont_img)
@@ -108,7 +118,7 @@ for i in range(60000):
     #pylab.imshow(cont_train_data[i])
     #pylab.show()
     
-pickle_file = 'cont_train.pickle'
+pickle_file = '../data/MNIST_DATA/cont_train.pickle'
 
 try:
   f = open(pickle_file, 'wb')
@@ -122,7 +132,7 @@ except Exception as e:
   print 'Unable to save data to', pickle_file, ':', e
   raise
     
-pickle_file = 'cont_valid.pickle'
+pickle_file = '../data/MNIST_DATA/cont_valid.pickle'
 
 try:
   f = open(pickle_file, 'wb')
@@ -165,20 +175,23 @@ for i in range(10000):
     #cont_label = [5-num_blanck, val]
     
     for k in range(num_blanck):
-        if np.random.rand() < 0.5:
-            cont_img = cont_img + [blank]
-            cont_label = cont_label + [-1]
-        else:
-            cont_img = [blank] + cont_img
-            cont_label = [-1] + cont_label 
+        #if np.random.rand() < 0.5:
+        #    cont_img = cont_img + [blank]
+        #    cont_label = cont_label + [-1]
+        #else:
+        #    cont_img = [blank] + cont_img
+        #    cont_label = [-1] + cont_label 
         
+        cont_img = cont_img + [blank]
+        cont_label = cont_label + [-1]
+
     cont_test_labels[i] = cont_label
     cont_test_data[i, :, :]  = np.hstack(cont_img)
     #print cont_train_labels[i]
     #pylab.imshow(cont_train_data[i])
     #pylab.show()
     
-pickle_file = 'cont_test.pickle'
+pickle_file = '../data/MNIST_DATA/cont_test.pickle'
 
 try:
   f = open(pickle_file, 'wb')
@@ -193,11 +206,5 @@ except Exception as e:
   raise
 
 
-def get_one_hot(raw_labels, num_col):
-    labels = tf.expand_dims(raw_labels, 1)
-    indices = tf.expand_dims(tf.range(0, batch_size), 1)
-    concated = tf.concat(1, [indices, labels])
-    onehot_labels = tf.sparse_to_dense(concated, tf.pack([batch_size, num_col]), 1.0, 0.0)
-    return onehot_labels
 
 
