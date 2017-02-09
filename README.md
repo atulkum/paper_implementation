@@ -24,3 +24,6 @@ https://arxiv.org/abs/1606.05328
 
 Learning to learn by gradient descent by gradient descent
 https://arxiv.org/pdf/1606.04474v2.pdf
+
+Language Modeling with Gated Convolutional Networks
+https://arxiv.org/abs/1612.08083
