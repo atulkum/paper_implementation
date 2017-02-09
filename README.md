@@ -21,3 +21,6 @@ https://arxiv.org/abs/1601.06759
 
 Conditional Image Generation with PixelCNN Decoders
 https://arxiv.org/abs/1606.05328
+
+Learning to learn by gradient descent by gradient descent
+https://arxiv.org/pdf/1606.04474v2.pdf
