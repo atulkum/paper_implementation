@@ -1,4 +1,4 @@
-# multi digit recognition tensorflow
+# deep learning paper implementation
 Recognizing house number in SVHN dataset using tensorflow. 
 
 Multi-digit Number Recognition from Street View Imagery using Deep Convolutional Neural Networks
