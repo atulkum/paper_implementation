@@ -10,7 +10,7 @@ https://arxiv.org/abs/1412.7755
 Recurrent Models of Visual Attention
 https://arxiv.org/abs/1406.6247
 
-DRAW: A Recurrent Neural Network For Image Generation
+[Done] DRAW: A Recurrent Neural Network For Image Generation
 https://arxiv.org/abs/1502.04623
 
 Neural Turing Machines
