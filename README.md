@@ -26,3 +26,6 @@ https://arxiv.org/pdf/1606.04474v2.pdf
 
 Language Modeling with Gated Convolutional Networks
 https://arxiv.org/abs/1612.08083
+
+Show, Attend and Tell: Neural Image Caption Generation with Visual Attention
+https://arxiv.org/abs/1502.03044
