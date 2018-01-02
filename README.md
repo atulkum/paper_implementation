@@ -32,3 +32,6 @@ https://arxiv.org/abs/1502.03044
 
 Maxout Networks
 https://arxiv.org/abs/1302.4389
+
+A Decomposable Attention Model for Natural Language Inference
+https://arxiv.org/pdf/1606.01933.pdf
