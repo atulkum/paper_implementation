@@ -5,7 +5,7 @@ def model(a, b):
         embed_hid = 200
         hidden1 = 100
         
-        n_dim = 400
+        n_dim = 300
         n_tokens = 15
         with tf.variable_scope('embedding'):
             a = tf.reshape(q, [-1, n_dim])
@@ -22,21 +22,20 @@ def model(a, b):
             b = tf.reshape(b, [-1, n_tokens, embed_hid])
 
         e = tf.matmul(a, tf.transpose(b, perm =[0, 2, 1]))
-        e_i = tf.nn.softmax(e, dim=2)
-        e_j = tf.nn.softmax(e, dim=1)
-        e_j = tf.transpose(e_j, perm=[0, 2, 1])
+        e_i = tf.nn.softmax(e, dim=-1)
+        e_j = tf.nn.softmax(tf.transpose(e, perm=[0, 2, 1]), dim=-1)
         beta = tf.matmul(e_i, b)
         alpha = tf.matmul(e_j, a)
 
         with tf.variable_scope('G'):
             v = tf.concat([a, beta], axis=2)
-            v = tf.reshape(v, [-1, 2*n_dim])
+            v = tf.reshape(v, [-1, 2 * embed_hid])
             v = slim.fully_connected(tf.nn.dropout(v, keep_prob=self.dropout), hidden1, activation_fn=tf.nn.relu,
                                      weights_regularizer=slim.l2_regularizer(self.reg))
             v1i = tf.reshape(v, [-1, n_tokens, hidden1])
         with tf.variable_scope('G', reuse=True):
             v = tf.concat([b, alpha], axis=2)
-            v = tf.reshape(v, [-1, 2 * n_dim])
+            v = tf.reshape(v, [-1, 2 * embed_hid])
             v = slim.fully_connected(tf.nn.dropout(v, keep_prob=self.dropout), hidden1, activation_fn=tf.nn.relu,
                                        weights_regularizer=slim.l2_regularizer(self.reg))
             v2j = tf.reshape(v, [-1, n_tokens, hidden1])
